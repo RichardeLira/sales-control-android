@@ -1,8 +1,6 @@
 package com.example.salescontroll.viewModel;
 
 import android.app.Application;
-import android.content.Context;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -13,12 +11,8 @@ import com.example.salescontroll.Repository.ClientRepository;
 import com.example.salescontroll.Repository.ProductsRepository;
 import com.example.salescontroll.entitys.Client;
 import com.example.salescontroll.entitys.Product;
-import com.example.salescontroll.entitys.Relations.ClientWithProducts;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class ClientManagerViewModel extends AndroidViewModel {
 

@@ -35,9 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private MainViewModel mainViewModel;
     private ImageView newClientButton;
     private ImageView searchButton;
-    private TextView finalValueOfDebitClients = null;
-    private Client aux;
-    private boolean oneTime = false;
+    private TextView finalValueOfDebitClients = null;;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,16 +56,11 @@ public class MainActivity extends AppCompatActivity {
         screenInitializerButtons();
         onClickEventListener();
         onClickListenerClient();
+        setUpClientViewModel();
 
         if (amountValue != null && clientId != -1) {
             loadClientData(clientId, amountValue);
-
         }
-        setUpClientViewModel();
-
-
-
-
 
     }
 
@@ -82,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
         newClientButton = findViewById(R.id.addNewClientButton);
         searchButton = findViewById(R.id.search_button_on_main_activity);
         finalValueOfDebitClients = findViewById(R.id.home_amount_value);
+
+
     }
 
     private void onClickEventListener() {
@@ -97,17 +92,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loadClientData(int clientId, String amountValue) {
-
-        mainViewModel.getClientByIdTest(clientId).subscribe((client) -> {
-            client.setDebitValue(amountValue);
-            mainViewModel.updateClientValueDebit(client).subscribe(() -> {
-                Toast.makeText(getApplicationContext(), "Client Updated: " + client.getFullName(), Toast.LENGTH_SHORT).show();
-            }, throwable -> {
-                Toast.makeText(getApplicationContext(), "Error updating client: " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-            });
-        });
+        mainViewModel.getClientByIdSingle(clientId)
+                .subscribe(client -> {
+                    if (client != null) {
+                        client.setDebitValue(amountValue);
+                        mainViewModel.updateClientValueDebit(client)
+                                .subscribe(() -> {
+                                    Toast.makeText(getApplicationContext(), "Client Updated: " + client.getFullName(), Toast.LENGTH_SHORT).show();
+                                }, throwable -> {
+                                    Toast.makeText(getApplicationContext(), "Error updating client: " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                                });
+                    }
+                }, throwable -> {
+                    Toast.makeText(getApplicationContext(), "Error fetching client: " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
-
 
 
     private void setAmountValue(String amountValue){
@@ -116,13 +115,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void setUpClientViewModel() {
 
-        mainViewModel.getAllClients().observe(this, new Observer<List<Client>>() {
-            @Override
-            public void onChanged(List<Client> newClient) {
-                setAmountValue(mainViewModel.getValueForAllClients(newClient, getApplicationContext()));
-                mainAdapter.setClients(newClient);
+        mainViewModel.getAllClients().subscribe((List<Client> clients) -> {
+            if (clients != null) {
+                mainAdapter.setClients(clients);
+                setAmountValue(mainViewModel.getValueForAllClients(clients));
             }
-        });
+        }, throwable -> {
+            Toast.makeText(getApplicationContext(), "Error fetching client: " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+        } );
+
     }
 
     private void onClickListenerClient() {

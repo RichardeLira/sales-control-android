@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/insert_new_product"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/insert_new_product">
+    android:layout_height="match_parent">
 
 
     <FrameLayout
@@ -90,7 +90,9 @@
         android:id="@+id/frameLayout5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -100,34 +102,32 @@
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="60dp"
-            android:layout_gravity="start">
+            android:layout_gravity="start"
+            tools:ignore="MissingClass">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="top"
-                android:layout_marginStart="20dp"
                 android:fontFamily="@font/poppins"
                 android:text="Valor do produto"
                 android:textColor="#A2A2A7"
                 android:textSize="14sp" />
+
 
             <EditText
                 android:id="@+id/new_insert_product_value"
                 android:layout_width="150dp"
                 android:layout_height="35dp"
                 android:layout_gravity="bottom"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:autoText="false"
+
                 android:background="@drawable/rounded_edit_text"
-                android:inputType="text"
-                android:text="0,00"
+                android:hint="R$ 0,00"
+                android:inputType="numberDecimal"
                 android:textAlignment="textStart"
                 android:textAllCaps="false"
                 android:textColor="#A2A2A7"
                 android:textSize="14sp" />
-
 
         </FrameLayout>
 
@@ -141,7 +141,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="top"
-                android:layout_marginStart="20dp"
                 android:fontFamily="@font/poppins"
                 android:text="Quantidade"
                 android:textColor="#A2A2A7"
@@ -153,10 +152,8 @@
                 android:layout_width="150dp"
                 android:layout_height="35dp"
                 android:layout_gravity="bottom"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 android:background="@drawable/rounded_edit_text"
-                android:inputType="text"
+                android:inputType="numberDecimal"
                 android:text="1"
                 android:textColor="#A2A2A7"
                 android:textSize="14sp" />
@@ -169,35 +166,56 @@
 
 
     <TextView
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/poppins"
         android:text="Data da compra"
         android:textColor="#A2A2A7"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/editText"
+        app:layout_constraintBottom_toTopOf="@+id/new_insert_product_buy_date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/frameLayout5"
         app:layout_constraintVertical_bias="1.0" />
 
-    <EditText
-        android:id="@+id/new_insert_product_buy_date"
-        android:layout_width="0dp"
-        android:layout_height="35dp"
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginTop="50dp"
         android:background="@drawable/rounded_edit_text"
-        android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayout5"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintVertical_bias="0.0">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="end|center"
+            android:src="@drawable/calendar_add"
+           >
+        </ImageView>
+
+
+        <TextView
+            android:id="@+id/new_insert_product_buy_date"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:fontFamily="@font/poppins"
+            android:gravity="center|start"
+            android:textColor="#A2A2A7"
+            android:textSize="16sp">
+
+        </TextView>
+    </FrameLayout>
 
     <FrameLayout
         android:layout_width="wrap_content"
@@ -226,8 +244,6 @@
             android:src="@drawable/cart_add" />
 
     </FrameLayout>
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

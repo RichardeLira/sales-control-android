@@ -37,7 +37,7 @@
 
 
             <ImageView
-                android:id="@+id/back_button_on_manager_client"
+                android:id="@+id/back_button_on_search_client"
                 android:layout_width="42dp"
                 android:layout_height="42dp"
                 android:layout_gravity="center"
@@ -88,7 +88,7 @@
         app:layout_constraintVertical_bias="0.0">
 
         <TextView
-            android:id="@+id/client_debit_value"
+            android:id="@+id/client_debit_value_on_search"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -138,8 +138,19 @@
 
     </FrameLayout>
 
+    <TextView
+        android:id="@+id/search_results_not_found_warning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#A2A2A7"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout8" />
 
-    <androidx.recyclerview.widget.RecyclerView
+
+        <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/items_products_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

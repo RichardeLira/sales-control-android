@@ -59,6 +59,7 @@ public class ClientManagerActivity extends AppCompatActivity {
 
         // Recuperando o ID do cliente da Intent e carregando os dados
         clientId = getIntent().getIntExtra("CLIENT_ID", -1);
+        Toast.makeText(this, "ID" + clientId, Toast.LENGTH_SHORT).show();
 
         if (clientId != -1) {
             clientManagerViewModel.setLastUserIdAdded(clientId);
@@ -98,6 +99,7 @@ public class ClientManagerActivity extends AppCompatActivity {
             intent.putExtra("CLIENT_ID", this.clientId);
             startActivity(intent);
             finish();
+
         });
 
         insertNewProductButton.setOnClickListener(view -> {

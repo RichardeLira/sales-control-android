@@ -6,9 +6,8 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
 
-import com.example.salescontroll.entitys.Client;
 import com.example.salescontroll.entitys.Product;
-import com.example.salescontroll.entitys.Relations.ClientWithProducts;
+
 
 import java.util.List;
 @Dao

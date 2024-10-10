@@ -69,17 +69,14 @@ public class NewClientActivity extends AppCompatActivity {
                 newClient.setFullName(name);
                 newClient.setNumberPhone(phone);
 
-                newClientViewModel.addNewClient(newClient, new NewClientViewModel.OnClientAddedListener() {
-                    @Override
-                    public void onClientAdded(Client client) {
-                        if (client != null) {
-                            Intent intent = new Intent(NewClientActivity.this, ClientManagerActivity.class);
-                            intent.putExtra("CLIENT_ID", client.getCid());
-                            startActivity(intent);
-                            finish();  // Close the current activity
-                        }
-                    }
-                });
+               newClientViewModel.addNewClient(newClient).subscribe(Long -> {
+                   if(Long != null) {
+                       Intent intent = new Intent(NewClientActivity.this, ClientManagerActivity.class);
+                       intent.putExtra("CLIENT_ID", Long.intValue());
+                       startActivity(intent);
+                       finish();  // Close the current activity
+                   }
+               });
             }
         });
     }

@@ -10,6 +10,7 @@ import androidx.room.Update;
 import com.example.salescontroll.entitys.Client;
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 
@@ -17,7 +18,7 @@ import io.reactivex.rxjava3.core.Flowable;
 public interface ClientDao {
 
     @Query("SELECT * FROM Client")
-    LiveData<List<Client>> getAll();
+    Flowable<List<Client>> getAll();
 
     @Query("SELECT * FROM Client WHERE cid IN (:userIds)")
     LiveData<List<Client>> loadAllClientsByIds(int[] userIds);
@@ -26,13 +27,13 @@ public interface ClientDao {
     LiveData<Client> loadClientById(int userId);
 
     @Query("SELECT * FROM Client WHERE cid = :userId")
-    Flowable<Client> loadClientByIdT(int userId);
+    Single<Client> loadClientByIdT(int userId);
 
-    @Query("SELECT * FROM Client WHERE full_name LIKE :name LIMIT 1")
-    Client findByName(String name);
+    @Query("SELECT * FROM Client WHERE LOWER(full_name) LIKE LOWER(:name || '%')")
+    Flowable<List<Client>> findByName(String name);
 
     @Insert
-    long insert(Client client);
+    Single<Long> insert(Client client);
 
     @Delete
     void delete(Client client);

@@ -29,20 +29,20 @@ public class ClientViewModel extends AndroidViewModel {
     public ClientViewModel(Application application) {
         super(application);
         clientRepository = new ClientRepository(application);
-        clientLiveData = clientRepository.getAllClients();
+//        clientLiveData = clientRepository.getAllClients();
     }
 
-    public void addNewClient(final Client client, OnClientAddedListener listener) {
-        databaseWriteExecutor.execute(() -> {
-            long clientId = clientRepository.addNewClient(client);
-            mainThreadHandler.post(() -> {
-                clientRepository.getClientById((int) clientId).observeForever(newClient -> {
-                    lastUserAddedLiveData.setValue(newClient);
-                    listener.onClientAdded(newClient);
-                });
-            });
-        });
-    }
+//    public void addNewClient(final Client client, OnClientAddedListener listener) {
+//        databaseWriteExecutor.execute(() -> {
+//            long clientId = clientRepository.addNewClient(client);
+//            mainThreadHandler.post(() -> {
+//                clientRepository.getClientById((int) clientId).observeForever(newClient -> {
+//                    lastUserAddedLiveData.setValue(newClient);
+//                    listener.onClientAdded(newClient);
+//                });
+//            });
+//        });
+//    }
 
     public LiveData<Client> getLastUserAdded() {
         return lastUserAddedLiveData;

@@ -14,28 +14,25 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
-
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.core.Completable;
 
 public class ClientRepository {
 
     private ClientDao clientDao;
-    private LiveData<List<Client>> allClients;
-    private static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(4);
-    private Handler mainThreadHandler = new Handler(Looper.getMainLooper());
 
     public ClientRepository(Application application) {
         AppDataBase db = AppDataBase.getDataBase(application);
         clientDao = db.clientDao();
-        allClients = clientDao.getAll();
+
     }
 
-    public LiveData<List<Client>> getAllClients() {
-        return allClients;
+    public Flowable<List<Client>> getAllClients() {
+        return clientDao.getAll();
     }
 
-    public long addNewClient(final Client client) {
+    public Single<Long> addNewClient(final Client client) {
         return clientDao.insert(client);
     }
 
@@ -43,10 +40,12 @@ public class ClientRepository {
         return clientDao.loadClientById(clientId);
     }
 
-
-
-    public Flowable<Client> getClientByITest(int clientId) {
+    public Single<Client> getClientByITest(int clientId) {
         return clientDao.loadClientByIdT(clientId);
+    }
+
+    public Flowable<List<Client>> searchClientByName(String clientName) {
+        return clientDao.findByName(clientName);
     }
 
 
