@@ -19,7 +19,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
-
         <TextView
             android:id="@+id/client_name_on_screen_manager"
             android:layout_width="wrap_content"
@@ -84,6 +83,7 @@
         android:id="@+id/frameLayout6"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -91,10 +91,22 @@
         app:layout_constraintVertical_bias="0.0">
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center"
+            android:fontFamily="@font/poppins"
+            android:textColor="#A2A2A7"
+            android:textSize="14sp"
+            android:text="Valor restante">
+        </TextView>
+
+
+        <TextView
             android:id="@+id/client_debit_value"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="bottom|center"
             android:fontFamily="@font/poppins_semibold"
             android:text="$8,545.00"
             android:textSize="26sp"
@@ -108,6 +120,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/poppins"
         android:text="Produto"
         android:textColor="#A2A2A7"
@@ -117,22 +130,49 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/frameLayout6" />
 
-    <EditText
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/new_insert_product_name"
         android:layout_width="371dp"
         android:layout_height="35dp"
+        android:layout_marginTop="5dp"
         android:background="@drawable/rounded_edit_text"
-        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        app:boxStrokeColor="@color/primary"
+        app:boxStrokeWidth="1dp"
+        app:boxStrokeWidthFocused="2dp"
+        app:endIconMode="dropdown_menu"
+        app:endIconDrawable="@drawable/drop_down"
+        style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
+        android:hint="Produto"
+        >
 
+
+        <AutoCompleteTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textColor="@color/primary_text"
+            android:textSize="16sp"
+            android:dropDownHeight="wrap_content"
+            android:dropDownVerticalOffset="8dp"
+            android:dropDownBackground="@color/white"
+            android:hint="Selecione o produto"
+            android:textCursorDrawable="@null"
+        />
+
+
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <FrameLayout
         android:id="@+id/frameLayout5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp
+"
         android:layout_marginEnd="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -186,16 +226,37 @@
                 android:textSize="14sp" />
 
 
-            <EditText
-                android:id="@+id/new_insert_product_quantity"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="150dp"
                 android:layout_height="35dp"
-                android:layout_gravity="bottom"
                 android:background="@drawable/rounded_edit_text"
-                android:inputType="numberDecimal"
-                android:text="1"
-                android:textColor="#A2A2A7"
-                android:textSize="14sp" />
+                android:layout_gravity="bottom"
+                app:boxBackgroundMode="outline"
+                app:boxStrokeWidth="1dp"
+                app:boxStrokeWidthFocused="2dp"
+                app:endIconMode="dropdown_menu"
+                app:endIconDrawable="@drawable/drop_down"
+                style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                 >
+
+
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:background="@null"
+                    android:padding="10dp"
+                    android:textColor="@color/primary_text"
+                    android:textSize="16sp"
+                    android:dropDownHeight="wrap_content"
+                    android:dropDownVerticalOffset="8dp"
+                    android:dropDownBackground="@color/white"
+                    android:textCursorDrawable="@null"
+                />
+
+
+            </com.google.android.material.textfield.TextInputLayout>
+
 
 
         </FrameLayout>
@@ -208,6 +269,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/poppins"
         android:text="Data da entrada"
         android:textColor="#A2A2A7"
@@ -250,7 +312,7 @@
             app:cons
 
     </TextView>
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout
         android:layout_width="wrap_content"
