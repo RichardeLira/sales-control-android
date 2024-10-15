@@ -1,11 +1,15 @@
 package com.example.salescontroll.Activities;
 
+import android.app.DatePickerDialog;
+import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,8 +23,10 @@ import com.example.salescontroll.Repository.EntryRepository;
 import com.example.salescontroll.Repository.ProductsRepository;
 import com.example.salescontroll.entitys.Product;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class addNewEntryActivity extends AppCompatActivity {
@@ -37,10 +43,12 @@ public class addNewEntryActivity extends AppCompatActivity {
     private EntryRepository entryRepository;
     private ProductsRepository productsRepository;
     // Control ID
-    int clientId = -1;
+    private int clientId = -1;
     // Screen fields
-
-
+    private EditText entryValue;
+    private TextView entryDateText;
+    private TextView userName;
+    private Calendar entryDate = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +67,23 @@ public class addNewEntryActivity extends AppCompatActivity {
     }
 
     private void UiInitializer() {
+        // Text and input elements initializer
+        entryValue = findViewById(R.id.insert_entry_value);
+        entryDateText = findViewById(R.id.insert_entry_date);
+        userName = findViewById(R.id.client_name_on_entry_screen);
+
+        DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                entryDate.set(Calendar.YEAR, year);
+                entryDate.set(Calendar.MONTH, month);
+                entryDate.set(Calendar.DAY_OF_MONTH, day);
+
+                String myFormat = "dd/MM/yy";
+                SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
+                entryDateText.setText(dateFormat.format(entryDate.getTime()));
+            }
+        };
 
     }
 
@@ -94,5 +119,13 @@ public class addNewEntryActivity extends AppCompatActivity {
            }
        });
    }
+
+
+
+   private void UserInformation() { }
+
+
+
+
 
 }

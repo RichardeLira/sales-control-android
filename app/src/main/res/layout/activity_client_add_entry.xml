@@ -21,7 +21,7 @@
         app:layout_constraintVertical_bias="0.0">
 
         <TextView
-            android:id="@+id/client_name_on_screen_entry"
+            android:id="@+id/client_name_on_entry_screen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -198,7 +198,7 @@
 
 
             <EditText
-                android:id="@+id/new_insert_product_value"
+                android:id="@+id/insert_entry_value"
                 android:layout_width="150dp"
                 android:layout_height="35dp"
                 android:layout_gravity="bottom"
@@ -304,7 +304,7 @@
 
 
         <TextView
-            android:id="@+id/new_insert_product_buy_date"
+            android:id="@+id/insert_entry_date"
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:fontFamily="@font/poppins"
