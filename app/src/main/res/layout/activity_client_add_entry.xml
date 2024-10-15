@@ -5,7 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/client_new_entry">
 
 
     <FrameLayout
@@ -20,7 +21,7 @@
         app:layout_constraintVertical_bias="0.0">
 
         <TextView
-            android:id="@+id/client_name_on_screen_manager"
+            android:id="@+id/client_name_on_screen_entry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -131,7 +132,7 @@
         app:layout_constraintTop_toBottomOf="@+id/frameLayout6" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/new_insert_product_name"
+        android:id="@+id/select_product_for_entry"
         android:layout_width="371dp"
         android:layout_height="35dp"
         android:layout_marginTop="5dp"
@@ -150,6 +151,7 @@
 
 
         <AutoCompleteTextView
+            android:id="@+id/select_product_for_entry_auto_complete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
@@ -177,7 +179,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/new_insert_product_name">
+        app:layout_constraintTop_toBottomOf="@+id/select_product_for_entry">
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -241,9 +243,9 @@
 
 
                 <AutoCompleteTextView
+                    android:id="@+id/payment_type_auto_complete"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:background="@null"
                     android:padding="10dp"
                     android:textColor="@color/primary_text"
@@ -308,11 +310,8 @@
             android:fontFamily="@font/poppins"
             android:gravity="center|start"
             android:textColor="#A2A2A7"
-            android:textSize="16sp"
-            app:cons
-
-    </TextView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+            android:textSize="16sp"/>
+    </FrameLayout>
 
     <FrameLayout
         android:layout_width="wrap_content"
@@ -323,12 +322,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText"
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout9"
         app:layout_constraintVertical_bias="1.0">
 
 
         <ImageView
-            android:id="@+id/add_new_product_on_button"
+            android:id="@+id/add_new_client_entry"
             android:layout_width="42dp"
             android:layout_height="42dp"
             android:layout_gravity="center"
@@ -338,8 +337,9 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_gravity="center"
-            android:src="@drawable/cart_add" />
+            android:src="@drawable/card_tick" />
 
     </FrameLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
