@@ -36,11 +36,14 @@ public class ClientRepository {
         return clientDao.insert(client);
     }
 
+
+    // Live data use (deprecated) Use Single with room db
     public LiveData<Client> getClientById(int clientId) {
         return clientDao.loadClientById(clientId);
     }
 
-    public Single<Client> getClientByITest(int clientId) {
+    // Use this one
+    public Single<Client> getClientByIdRoom(int clientId) {
         return clientDao.loadClientByIdT(clientId);
     }
 

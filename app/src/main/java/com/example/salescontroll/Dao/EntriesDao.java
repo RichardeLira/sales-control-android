@@ -7,8 +7,9 @@ import androidx.room.Transaction;
 
 
 import io.reactivex.Flowable;
-import java.util.List;
+import io.reactivex.rxjava3.core.Single;
 
+import java.util.List;
 
 import com.example.salescontroll.entitys.Entries;
 
@@ -27,7 +28,7 @@ public interface EntriesDao {
     Entries getOneEnterOfProduct(int productId, int enterId);
 
     @Insert
-    void insertEntries(Entries entries);
+    Single<Long> insertEntries(Entries entries);
 
 
 

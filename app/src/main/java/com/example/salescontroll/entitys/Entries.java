@@ -17,7 +17,7 @@ public class Entries {
     public int eId;
 
     @ColumnInfo(name = "enter_date")
-    public Date enterDate;
+    public String enterDate;
 
     @ColumnInfo(name = "pay_method")
     public String payMethod;
@@ -29,7 +29,7 @@ public class Entries {
     public int productId;
 
     // Set
-    public void setEnterDate(Date enterDate) {
+    public void setEnterDate(String enterDate) {
         this.enterDate = enterDate;
     }
 
@@ -41,8 +41,12 @@ public class Entries {
         this.enterValue = enterValue;
     }
 
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
+
     //Gets
-    public Date getEnterDate() {
+    public String getEnterDate() {
         return enterDate;
     }
 
@@ -52,5 +56,9 @@ public class Entries {
 
     public String getEnterValue() {
         return enterValue;
+    }
+
+    public int getProductId() {
+        return productId;
     }
 }

@@ -64,7 +64,7 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public Single<Client> getClientByIdSingle(int clientId) {
-        return clientRepository.getClientByITest(clientId)
+        return clientRepository.getClientByIdRoom(clientId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

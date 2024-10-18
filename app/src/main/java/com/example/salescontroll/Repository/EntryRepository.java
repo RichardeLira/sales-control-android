@@ -6,6 +6,8 @@ import com.example.salescontroll.Dao.EntriesDao;
 import com.example.salescontroll.DataBase.AppDataBase;
 import com.example.salescontroll.entitys.Entries;
 
+import io.reactivex.rxjava3.core.Single;
+
 public class EntryRepository {
 
     private EntriesDao entriesDao;
@@ -15,8 +17,8 @@ public class EntryRepository {
         entriesDao = db.entriesDAO();
     }
 
-    public void addNewEntry(final Entries entries) {
-        entriesDao.insertEntries(entries);
+    public Single<Long> addNewEntry(final Entries entries) {
+       return entriesDao.insertEntries(entries);
     }
 
 }
