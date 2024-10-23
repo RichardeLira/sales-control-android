@@ -274,10 +274,12 @@
             android:background="@drawable/circle_background" />
 
         <ImageView
+            android:id="@+id/button_product_or_entry_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/cart_add_solid" />
+            android:src="@drawable/cart_add_solid"
+             />
 
     </FrameLayout>
 

@@ -32,9 +32,11 @@ import com.example.salescontroll.viewModel.EntryViewModel;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import io.reactivex.rxjava3.core.Single;
 
@@ -42,13 +44,13 @@ import io.reactivex.rxjava3.core.Single;
 public class AddNewEntryActivity extends AppCompatActivity {
 
     // paymentsMethods const
-    private final String paymentsMethods[] = {"pix", "crédito", "dinheiro", "outro"};
+    private final String[] paymentsMethods = {"pix", "crédito", "dinheiro", "outro"};
     private AutoCompleteTextView autoCompleteTextViewPaymentType;
     private AutoCompleteTextView autoCompleteTextViewProductChoice;
     private EditText valueEntry;
     private Date dateEntry;
     private ArrayAdapter<String> adapterPaymentType;
-    private ArrayAdapter<Product> adapterProductSelect;
+    private ArrayAdapter<String> adapterProductSelect;
     // View model
     private EntryViewModel entryViewModel;
     // Control ID
@@ -59,6 +61,8 @@ public class AddNewEntryActivity extends AppCompatActivity {
     private TextView entryDateText;
     private TextView userName;
     private ImageView entryButtonConfirm;
+    private ImageView backButtonActivity;
+    // Calendar config
     private Calendar entryDate = Calendar.getInstance();
 
 
@@ -90,6 +94,7 @@ public class AddNewEntryActivity extends AppCompatActivity {
         entryDateText = findViewById(R.id.insert_entry_date);
         userName = findViewById(R.id.client_name_on_entry_screen);
         entryButtonConfirm = findViewById(R.id.add_new_client_entry);
+        backButtonActivity = findViewById(R.id.back_button_on_entry_screen);
 
         DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -157,8 +162,12 @@ public class AddNewEntryActivity extends AppCompatActivity {
             public void onChanged(List<Product> products) {
                 if (products != null) {
                     // set adapter data config
+                    List<String> productNames = products.stream()
+                            .map(Product::getProductName)
+                            .collect(Collectors.toList());
+
+                    adapterProductSelect = new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item_adapter, productNames);
                     autoCompleteTextViewProductChoice.setAdapter(adapterProductSelect);
-                    adapterProductSelect = new ArrayAdapter<Product>(getApplicationContext(), R.layout.list_item_adapter, products);
                 }
             }
         });

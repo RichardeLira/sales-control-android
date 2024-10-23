@@ -39,7 +39,7 @@
 
 
             <ImageView
-                android:id="@+id/back_button_on_manager_client"
+                android:id="@+id/back_button_on_entry_screen"
                 android:layout_width="42dp"
                 android:layout_height="42dp"
                 android:layout_gravity="center"
@@ -133,39 +133,32 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/select_product_for_entry"
-        android:layout_width="371dp"
+        android:layout_width="370dp"
         android:layout_height="35dp"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/rounded_edit_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3"
-        app:boxStrokeColor="@color/primary"
+        app:boxBackgroundMode="outline"
         app:boxStrokeWidth="1dp"
         app:boxStrokeWidthFocused="2dp"
         app:endIconMode="dropdown_menu"
         app:endIconDrawable="@drawable/drop_down"
-        style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
-        android:hint="Produto"
-        >
-
+        style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu">
 
         <AutoCompleteTextView
             android:id="@+id/select_product_for_entry_auto_complete"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:textColor="@color/primary_text"
-            android:textSize="16sp"
+            android:layout_height="match_parent"
+            android:background="@drawable/rounded_edit_text"
+            android:clickable="true"
             android:dropDownHeight="wrap_content"
             android:dropDownVerticalOffset="8dp"
-            android:dropDownBackground="@color/white"
-            android:hint="Selecione o produto"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:inputType="none"
+            android:textColor="@color/black"
             android:textCursorDrawable="@null"
-        />
-
-
-
+            android:textSize="16sp"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <FrameLayout
@@ -173,8 +166,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp
-"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -231,7 +223,6 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="150dp"
                 android:layout_height="35dp"
-                android:background="@drawable/rounded_edit_text"
                 android:layout_gravity="bottom"
                 app:boxBackgroundMode="outline"
                 app:boxStrokeWidth="1dp"
@@ -246,16 +237,17 @@
                     android:id="@+id/payment_type_auto_complete"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:padding="10dp"
-                    android:textColor="@color/primary_text"
+                    android:background="@drawable/rounded_edit_text"
+                    android:dropDownSelector="@color/white"
                     android:textSize="16sp"
+                    android:inputType="none"
                     android:dropDownHeight="wrap_content"
                     android:dropDownVerticalOffset="8dp"
-                    android:dropDownBackground="@color/white"
                     android:textCursorDrawable="@null"
                 />
 
+<!--                android:dropDownBackground="@color/white"-->
+<!--                android:textColor="@color/primary_text"-->
 
             </com.google.android.material.textfield.TextInputLayout>
 

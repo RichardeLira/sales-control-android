@@ -37,6 +37,10 @@
         <activity android:name=".Activities.NewClientActivity">
 
         </activity>
+
+        <activity android:name=".Activities.AddNewEntryActivity">
+
+        </activity>
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

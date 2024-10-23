@@ -1,5 +1,6 @@
 package com.example.salescontroll.Activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -16,11 +17,13 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.salescontroll.Adapters.ClientManagerAdapter;
+import com.example.salescontroll.Adapters.ClientManagerEntriesAdapter;
+import com.example.salescontroll.Adapters.ClientManagerProductsAdapter;
 
 import com.example.salescontroll.Helpers.StringToFloat;
 import com.example.salescontroll.R;
 import com.example.salescontroll.entitys.Client;
+import com.example.salescontroll.entitys.Entries;
 import com.example.salescontroll.entitys.Product;
 
 import com.example.salescontroll.viewModel.ClientManagerViewModel;
@@ -33,15 +36,26 @@ public class ClientManagerActivity extends AppCompatActivity {
     private ImageView backButton = null;
     private TextView clientName = null;
     private ImageView insertNewProductButton = null;
+    private ImageView InsertNewProductButtonBackGroundImage = null;
     private ImageView productsButton = null;
     private ImageView enterButton = null;
     private TextView productOrEnterText = null;
+    // View model
     private ClientManagerViewModel clientManagerViewModel = null;
-    private ClientManagerAdapter clientManagerAdapter = null;
+    // Adapters
+    private ClientManagerProductsAdapter clientManagerProductsAdapter;
+    private ClientManagerEntriesAdapter clientManagerEntriesAdapter;
     private RecyclerView recyclerView;
     private TextView clientDebitValueAmount;
     private String amountValue = null;
-    private int clientId = -1 ;
+    // Variables controller
+    private int clientId = -1;
+    private boolean buttonSelectEntryOrProduct = false;
+    // Product data
+    private  List<Product> products;
+    // Entry data
+    private List<Entries> entries;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,16 +95,26 @@ public class ClientManagerActivity extends AppCompatActivity {
         productsButton = findViewById(R.id.products_button_on_screen_client);
         productOrEnterText = findViewById(R.id.product_or_enter_name_screen_client);
         insertNewProductButton = findViewById(R.id.on_new_product_insert_button);
+        InsertNewProductButtonBackGroundImage =  findViewById(R.id.button_product_or_entry_add);
         clientDebitValueAmount = findViewById(R.id.client_debit_value);
     }
 
     public void onClickEventListener() {
+
         enterButton.setOnClickListener(view -> {
             productOrEnterText.setText("Entradas");
+            recyclerView.setAdapter(clientManagerEntriesAdapter);
+            clientManagerEntriesAdapter.setEntries(this.entries);
+            InsertNewProductButtonBackGroundImage.setImageResource(R.drawable.card_tick);
+            buttonSelectEntryOrProduct = false;
         });
 
         productsButton.setOnClickListener(view -> {
             productOrEnterText.setText("Produtos");
+            recyclerView.setAdapter(clientManagerProductsAdapter);
+            clientManagerProductsAdapter.setProducts(this.products);
+            InsertNewProductButtonBackGroundImage.setImageResource(R.drawable.cart_add_solid);
+            buttonSelectEntryOrProduct = true;
         });
 
         backButton.setOnClickListener(view -> {
@@ -103,9 +127,17 @@ public class ClientManagerActivity extends AppCompatActivity {
         });
 
         insertNewProductButton.setOnClickListener(view -> {
-            Intent intent = new Intent(ClientManagerActivity.this, InsertNewProductActivity.class);
+            Intent intent;
+            if (buttonSelectEntryOrProduct) {
+                intent = new Intent(ClientManagerActivity.this, InsertNewProductActivity.class);
+            } else {
+                intent = new Intent(ClientManagerActivity.this, AddNewEntryActivity.class);
+            }
             intent.putExtra("CLIENT_ID", clientManagerViewModel.getLastUserIdAdded());
             startActivity(intent);
+            finish();
+
+
         });
     }
 
@@ -125,10 +157,13 @@ public class ClientManagerActivity extends AppCompatActivity {
     }
 
     private void setUpRecyclerView() {
-        clientManagerAdapter = new ClientManagerAdapter();
+        clientManagerProductsAdapter = new ClientManagerProductsAdapter();
+        clientManagerEntriesAdapter  = new ClientManagerEntriesAdapter();
         recyclerView = findViewById(R.id.items_products_recycler_view_client_manager);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(clientManagerAdapter);
+        recyclerView.setAdapter(clientManagerProductsAdapter);
+        clientManagerProductsAdapter.setProducts(this.products);
+
     }
 
     private void setValueAmount(String amountValue) {
@@ -137,15 +172,25 @@ public class ClientManagerActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("CheckResult")
     private void setUpClientViewModel() {
 
-        // Configurando o ViewModel para observar as mudanças nos dados dos produtos
         clientManagerViewModel.getAllProductsByUser(clientManagerViewModel.getLastUserIdAdded()).observe(this, new Observer<List<Product>>() {
             @Override
             public void onChanged(List<Product> newProduct) {
                 setValueAmount(clientManagerViewModel.getAmountProductValue(newProduct));
-                clientManagerAdapter.setProducts(newProduct);
+                products = newProduct;
             }
         });
+
+         clientManagerViewModel.getAllEntriesByUser(clientManagerViewModel.getLastUserIdAdded())
+                 .subscribe(entries -> {
+                     if (entries != null) {
+                         this.entries = entries;
+                     }
+                 }, throwable -> {
+                     Toast.makeText(getApplicationContext(), "Error fetching entries for client: " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                 });
     }
+
 }

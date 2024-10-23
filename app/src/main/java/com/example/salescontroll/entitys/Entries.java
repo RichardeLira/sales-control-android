@@ -28,6 +28,9 @@ public class Entries {
     @ColumnInfo(name = "productId")
     public int productId;
 
+    @ColumnInfo(name = "product_name")
+    public String productName;
+
     // Set
     public void setEnterDate(String enterDate) {
         this.enterDate = enterDate;
@@ -43,6 +46,10 @@ public class Entries {
 
     public void setProductId(int productId) {
         this.productId = productId;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     //Gets
@@ -61,4 +68,9 @@ public class Entries {
     public int getProductId() {
         return productId;
     }
+
+    public String getProductName() {
+        return productName;
+    }
+
 }
