@@ -62,6 +62,7 @@ public class AddNewEntryActivity extends AppCompatActivity {
     private TextView userName;
     private ImageView entryButtonConfirm;
     private ImageView backButtonActivity;
+
     // Calendar config
     private Calendar entryDate = Calendar.getInstance();
 
@@ -77,11 +78,16 @@ public class AddNewEntryActivity extends AppCompatActivity {
             return insets;
         });
 
-        this.clientId = getIntent().getIntExtra("CLIENT_ID", -1);
-        this.productId = getIntent().getIntExtra("PRODUCT_ID", -1);
+        if (getIntent().getIntExtra("CLIENT_ID", -1) != -1 && getIntent().getIntExtra("PRODUCT_ID", -1) != -1) {
+            this.clientId = getIntent().getIntExtra("CLIENT_ID", -1);
+            this.productId = getIntent().getIntExtra("PRODUCT_ID", -1);
+        } else {
+            Toast.makeText(getApplicationContext(), "Erro ao carregar dados do client", Toast.LENGTH_SHORT).show();
+        }
+
         entryViewModel = new ViewModelProvider(this).get(EntryViewModel.class);
 
-
+        // Start up application
         dropDownConfig();
         userInformation();
         UiInitializer();
@@ -95,6 +101,8 @@ public class AddNewEntryActivity extends AppCompatActivity {
         userName = findViewById(R.id.client_name_on_entry_screen);
         entryButtonConfirm = findViewById(R.id.add_new_client_entry);
         backButtonActivity = findViewById(R.id.back_button_on_entry_screen);
+
+
 
         DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -110,6 +118,13 @@ public class AddNewEntryActivity extends AppCompatActivity {
         };
 
         textValueParsed();
+
+        entryDateText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DatePickerDialog(AddNewEntryActivity.this, date, entryDate.get(Calendar.YEAR),entryDate.get(Calendar.MONTH),entryDate.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
 
 
         // Confirm button entry
@@ -136,16 +151,21 @@ public class AddNewEntryActivity extends AppCompatActivity {
                             finish();
                         } else {
                             Toast.makeText(getApplicationContext(), "Não foi possível adicionar um novo cliente", Toast.LENGTH_SHORT).show();
-
-                            Intent intent = new Intent(AddNewEntryActivity.this, ClientManagerActivity.class);
-                            startActivity(intent);
-                            finish();
                         }
                     });
                 }
             }
         });
 
+        //Back button listening
+        backButtonActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AddNewEntryActivity.this, ClientManagerActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     private void dropDownConfig() {
