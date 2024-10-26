@@ -10,6 +10,9 @@ import com.example.salescontroll.entitys.Product;
 
 
 import java.util.List;
+
+import io.reactivex.rxjava3.core.Single;
+
 @Dao
 public interface ProductsDao {
 
@@ -21,7 +24,7 @@ public interface ProductsDao {
     // One product by one client
     @Transaction
     @Query("SELECT * FROM Client, product WHERE cid = :clientId AND pId = :productId")
-    Product getOneProductOfClient(int clientId, int productId);
+    Single<Product> getOneProductOfClient(int clientId, int productId);
 
     // Insert new product on client
     @Insert

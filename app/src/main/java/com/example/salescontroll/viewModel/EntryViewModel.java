@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.example.salescontroll.Helpers.StringToFloat;
 import com.example.salescontroll.Repository.ClientRepository;
 import com.example.salescontroll.Repository.EntryRepository;
 import com.example.salescontroll.Repository.ProductsRepository;
@@ -53,8 +54,16 @@ public class EntryViewModel extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    public Single<Product> getProductByIdSingle(int clientId, int productId) {
+        return productsRepository.getOneProduct(clientId, productId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 
 
+    public Float computeDebitValue(String clientDebitValue, String entryValue) {
+        return StringToFloat.convertStringToFloat(clientDebitValue) - StringToFloat.convertStringToFloat(entryValue);
+    }
 
 
 }

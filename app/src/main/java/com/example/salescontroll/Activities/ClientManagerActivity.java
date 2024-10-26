@@ -82,10 +82,12 @@ public class ClientManagerActivity extends AppCompatActivity {
             loadClientData(clientManagerViewModel.getLastUserIdAdded());
         }
 
+
+        setUpClientViewModel();
         setUpRecyclerView();
         screenInitializerButtons();
-        setUpClientViewModel();
         onClickEventListener();
+        onClickListenerProduct();
     }
 
     public void screenInitializerButtons() {
@@ -192,5 +194,20 @@ public class ClientManagerActivity extends AppCompatActivity {
                      Toast.makeText(getApplicationContext(), "Error fetching entries for client: " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
                  });
     }
+
+
+
+    private void onClickListenerProduct() {
+        clientManagerProductsAdapter.setOptionListener(new ClientManagerProductsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Product product, int position) {
+                Intent intent = new Intent(ClientManagerActivity.this, AddNewEntryActivity.class);
+                intent.putExtra("CLIENT_ID", product.getClientId());
+                intent.putExtra("PRODUCT_ID", product.getpId());
+                startActivity(intent);
+            }
+        });
+    }
+
 
 }

@@ -21,7 +21,7 @@
         app:layout_constraintVertical_bias="0.0">
 
         <TextView
-            android:id="@+id/client_name_on_entry_screen"
+            android:id="@+id/client_product_on_entry_screen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -102,65 +102,15 @@
 
 
         <TextView
-            android:id="@+id/client_debit_value"
+            android:id="@+id/client_debit_value_on_screen_entry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
             android:layout_marginTop="20dp"
             android:fontFamily="@font/poppins_semibold"
-            android:text="$8,545.00"
+            android:text="$0"
             android:textSize="26sp"
             android:textStyle="bold" />
-
-    </FrameLayout>
-
-
-    <FrameLayout
-        android:id="@+id/select_product_for_entry"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayout6"
-        app:layout_constraintVertical_bias="0.0">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|start"
-            android:fontFamily="@font/poppins"
-            android:text="Produto"
-            android:textColor="#A2A2A7"
-            android:textSize="14sp" />
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_marginTop="20dp"
-            app:boxStrokeWidth="0sp"
-            app:boxStrokeWidthFocused="0sp"
-            app:endIconDrawable="@drawable/drop_down"
-            app:endIconMode="dropdown_menu"
-            >
-
-            <AutoCompleteTextView
-                android:id="@+id/select_product_for_entry_auto_complete"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/rounded_edit_text"
-                android:textColor="#A2A2A7"
-                android:textAlignment="textStart"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:inputType="none"
-                android:textSize="16sp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
 
     </FrameLayout>
 
@@ -174,7 +124,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/select_product_for_entry"
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout6"
         app:layout_constraintVertical_bias="0.0">
 
         <FrameLayout
@@ -246,7 +196,6 @@
                     android:inputType="none"
                     android:textCursorDrawable="@null"
                     android:textSize="16sp" />
-
 
 
             </com.google.android.material.textfield.TextInputLayout>

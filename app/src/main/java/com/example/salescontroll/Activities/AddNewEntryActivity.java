@@ -25,6 +25,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.salescontroll.Helpers.StringToFloat;
 import com.example.salescontroll.R;
 import com.example.salescontroll.entitys.Entries;
 import com.example.salescontroll.entitys.Product;
@@ -32,13 +33,13 @@ import com.example.salescontroll.viewModel.EntryViewModel;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-import io.reactivex.rxjava3.core.Single;
+
 
 
 public class AddNewEntryActivity extends AppCompatActivity {
@@ -59,10 +60,12 @@ public class AddNewEntryActivity extends AppCompatActivity {
     // Screen fields
     private EditText entryValue;
     private TextView entryDateText;
-    private TextView userName;
+    private TextView clientProductName;
     private ImageView entryButtonConfirm;
     private ImageView backButtonActivity;
-
+    private TextView remainingValue;
+    // Client information
+    private String productDebitValue;
     // Calendar config
     private Calendar entryDate = Calendar.getInstance();
 
@@ -98,10 +101,10 @@ public class AddNewEntryActivity extends AppCompatActivity {
         // Text and input elements initializer
         entryValue = findViewById(R.id.insert_entry_value);
         entryDateText = findViewById(R.id.insert_entry_date);
-        userName = findViewById(R.id.client_name_on_entry_screen);
+        clientProductName = findViewById(R.id.client_product_on_entry_screen);
         entryButtonConfirm = findViewById(R.id.add_new_client_entry);
         backButtonActivity = findViewById(R.id.back_button_on_entry_screen);
-
+        remainingValue = findViewById(R.id.client_debit_value_on_screen_entry);
 
 
         DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -174,23 +177,23 @@ public class AddNewEntryActivity extends AppCompatActivity {
         adapterPaymentType = new ArrayAdapter<String>(this, R.layout.list_item_adapter, paymentsMethods);
         autoCompleteTextViewPaymentType.setAdapter(adapterPaymentType);
 
-        // Product select drop down config
-        autoCompleteTextViewProductChoice = findViewById(R.id.select_product_for_entry_auto_complete);
-
-        entryViewModel.getAllProductsForEntry(this.clientId).observe(this, new Observer<List<Product>>() {
-            @Override
-            public void onChanged(List<Product> products) {
-                if (products != null) {
-                    // set adapter data config
-                    List<String> productNames = products.stream()
-                            .map(Product::getProductName)
-                            .collect(Collectors.toList());
-
-                    adapterProductSelect = new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item_adapter, productNames);
-                    autoCompleteTextViewProductChoice.setAdapter(adapterProductSelect);
-                }
-            }
-        });
+//        // Product select drop down config
+//        autoCompleteTextViewProductChoice = findViewById(R.id.select_product_for_entry_auto_complete);
+//
+//        entryViewModel.getAllProductsForEntry(this.clientId).observe(this, new Observer<List<Product>>() {
+//            @Override
+//            public void onChanged(List<Product> products) {
+//                if (products != null) {
+//                    // set adapter data config
+//                    List<String> productNames = products.stream()
+//                            .map(Product::getProductName)
+//                            .collect(Collectors.toList());
+//
+//                    adapterProductSelect = new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item_adapter, productNames);
+//                    autoCompleteTextViewProductChoice.setAdapter(adapterProductSelect);
+//                }
+//            }
+//        });
 
         // Drop Down Select listener
         dropDownListener();
@@ -201,9 +204,19 @@ public class AddNewEntryActivity extends AppCompatActivity {
        autoCompleteTextViewPaymentType.setOnItemClickListener(new AdapterView.OnItemClickListener() {
            @Override
            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String item = adapterView.getItemAtPosition(i).toString();
+               String item = adapterView.getItemAtPosition(i).toString();
            }
        });
+
+
+//       autoCompleteTextViewProductChoice.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//           @Override
+//           public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//               String item = adapterView.getItemAtPosition(i).toString();
+//               Toast.makeText(getApplicationContext(), "Integer ID" + Integer.toString(i), Toast.LENGTH_SHORT).show();
+//
+//           }
+//       });
    }
 
     private void textValueParsed() {
@@ -217,6 +230,14 @@ public class AddNewEntryActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // on typing value
+                Toast.makeText(getApplicationContext(), "Error fetching product data: " + s.toString(), Toast.LENGTH_SHORT).show();
+                Float computedValue = entryViewModel.computeDebitValue(productDebitValue, s.toString());
+                if (computedValue < 0) {
+                    remainingValue.setText(StringToFloat.editStringValueWithDollar(productDebitValue));
+                } else {
+                    remainingValue.setText(StringToFloat.editStringValueWithDollar(StringToFloat.convertFloatToString(computedValue)));
+                }
             }
 
             @Override
@@ -247,10 +268,22 @@ public class AddNewEntryActivity extends AppCompatActivity {
 
    @SuppressLint("CheckResult")
    private void userInformation() {
+
+        entryViewModel.getProductByIdSingle(clientId,productId).subscribe(product -> {
+            if (product != null) {
+                clientProductName.setText(product.getProductName());
+                remainingValue.setText(StringToFloat.editStringValueWithDollar(product.getProductValue()));
+                productDebitValue = product.getProductValue();
+            }
+        }, throwable -> {
+            Toast.makeText(getApplicationContext(), "Error fetching product data: " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+        });
+
+
        entryViewModel.getClientByIdSingle(clientId)
                .subscribe(client -> {
                    if (client != null) {
-                        userName.setText(client.getFullName());
+//                        clientDebitValue = client.getDebitValue();
                    }
                }, throwable -> {
                    Toast.makeText(getApplicationContext(), "Error fetching client: " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
