@@ -1,5 +1,6 @@
 package com.example.salescontroll.viewModel;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,7 @@ import com.example.salescontroll.entitys.Product;
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -61,8 +63,29 @@ public class EntryViewModel extends AndroidViewModel {
     }
 
 
-    public Float computeDebitValue(String clientDebitValue, String entryValue) {
-        return StringToFloat.convertStringToFloat(clientDebitValue) - StringToFloat.convertStringToFloat(entryValue);
+    @SuppressLint("CheckResult")
+    public double computeAllEntriesForOneProduct(int productId) {
+        Flowable<List<Entries>> entries = entryRepository.getAlEntriesForClient(productId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+
+        final double[] amountEntriesValue = {0.00};
+
+        entries.subscribe(entriesData  -> {
+            if (entriesData != null) {
+                for (Entries actualEntry : entriesData ) {
+                    amountEntriesValue[0] += Double.parseDouble(actualEntry.getEnterValue());
+                }
+
+            }
+
+        }, throwable -> {
+
+        });
+
+        return amountEntriesValue[0];
+
     }
 
 

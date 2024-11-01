@@ -46,6 +46,10 @@ public class AddNewEntryActivity extends AppCompatActivity {
 
     // paymentsMethods const
     private final String[] paymentsMethods = {"pix", "crédito", "dinheiro", "outro"};
+    private final String[] textOnScreenForAmountValue = {"valor restante", "seu lucro atual"};
+    // Button change controller;
+    private boolean changeText = true;
+    // Adapter config
     private AutoCompleteTextView autoCompleteTextViewPaymentType;
     private AutoCompleteTextView autoCompleteTextViewProductChoice;
     private EditText valueEntry;
@@ -64,8 +68,12 @@ public class AddNewEntryActivity extends AppCompatActivity {
     private ImageView entryButtonConfirm;
     private ImageView backButtonActivity;
     private TextView remainingValue;
+    private ImageView changeValueCompute;
+    private  TextView textForAmountValue;
     // Client information
     private String productDebitValue;
+    private double profitOnProduct;
+    private double reamingValueOnProduct;
     // Calendar config
     private Calendar entryDate = Calendar.getInstance();
 
@@ -95,6 +103,7 @@ public class AddNewEntryActivity extends AppCompatActivity {
         userInformation();
         UiInitializer();
 
+
     }
 
     private void UiInitializer() {
@@ -105,6 +114,8 @@ public class AddNewEntryActivity extends AppCompatActivity {
         entryButtonConfirm = findViewById(R.id.add_new_client_entry);
         backButtonActivity = findViewById(R.id.back_button_on_entry_screen);
         remainingValue = findViewById(R.id.client_debit_value_on_screen_entry);
+        changeValueCompute = findViewById(R.id.change_value_amount_entry_screen);
+        textForAmountValue = findViewById(R.id.text_for_amount_value_on_entry_screen);
 
 
         DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -169,6 +180,29 @@ public class AddNewEntryActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        // Change Value listening
+        changeValueCompute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!changeText) {
+                    textForAmountValue.setText(textOnScreenForAmountValue[0]);
+                    remainingValue.setText(StringToFloat.editStringValueWithDollar(Double.toString(reamingValueOnProduct)));
+                    changeText = true;
+                } else {
+                    textForAmountValue.setText(textOnScreenForAmountValue[1]);
+                    remainingValue.setText(StringToFloat.editStringValueWithDollar(Double.toString(profitOnProduct)));
+                    changeText = false;
+                }
+
+            }
+        });
+
+
+
+
+
+
     }
 
     private void dropDownConfig() {
@@ -177,27 +211,10 @@ public class AddNewEntryActivity extends AppCompatActivity {
         adapterPaymentType = new ArrayAdapter<String>(this, R.layout.list_item_adapter, paymentsMethods);
         autoCompleteTextViewPaymentType.setAdapter(adapterPaymentType);
 
-//        // Product select drop down config
-//        autoCompleteTextViewProductChoice = findViewById(R.id.select_product_for_entry_auto_complete);
-//
-//        entryViewModel.getAllProductsForEntry(this.clientId).observe(this, new Observer<List<Product>>() {
-//            @Override
-//            public void onChanged(List<Product> products) {
-//                if (products != null) {
-//                    // set adapter data config
-//                    List<String> productNames = products.stream()
-//                            .map(Product::getProductName)
-//                            .collect(Collectors.toList());
-//
-//                    adapterProductSelect = new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item_adapter, productNames);
-//                    autoCompleteTextViewProductChoice.setAdapter(adapterProductSelect);
-//                }
-//            }
-//        });
-
-        // Drop Down Select listener
         dropDownListener();
+
     }
+
 
 
    private void dropDownListener() {
@@ -209,14 +226,6 @@ public class AddNewEntryActivity extends AppCompatActivity {
        });
 
 
-//       autoCompleteTextViewProductChoice.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//           @Override
-//           public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//               String item = adapterView.getItemAtPosition(i).toString();
-//               Toast.makeText(getApplicationContext(), "Integer ID" + Integer.toString(i), Toast.LENGTH_SHORT).show();
-//
-//           }
-//       });
    }
 
     private void textValueParsed() {
@@ -230,14 +239,7 @@ public class AddNewEntryActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // on typing value
-                Toast.makeText(getApplicationContext(), "Error fetching product data: " + s.toString(), Toast.LENGTH_SHORT).show();
-                Float computedValue = entryViewModel.computeDebitValue(productDebitValue, s.toString());
-                if (computedValue < 0) {
-                    remainingValue.setText(StringToFloat.editStringValueWithDollar(productDebitValue));
-                } else {
-                    remainingValue.setText(StringToFloat.editStringValueWithDollar(StringToFloat.convertFloatToString(computedValue)));
-                }
+
             }
 
             @Override
@@ -246,12 +248,38 @@ public class AddNewEntryActivity extends AppCompatActivity {
                     entryValue.removeTextChangedListener(this);
 
                     String cleanString = s.toString().replaceAll("[R$,.\\s]", "");
+
                     double parsed;
                     try {
                         parsed = Double.parseDouble(cleanString);
                     } catch (NumberFormatException e) {
                         parsed = 0.00;
                     }
+
+                    double auxParsed = (parsed/100);
+
+                    // valor que sobra ainda para ser pago
+                    double computedValue =  reamingValueOnProduct - auxParsed;
+                    double auxReamingValueOnProduct = reamingValueOnProduct;
+                    double auxProfitOnProduct = profitOnProduct;
+
+
+                    if (computedValue < 0) {
+                        auxProfitOnProduct = Double.parseDouble(productDebitValue);
+                        auxReamingValueOnProduct = 0.00;
+
+                    } else {
+                        auxProfitOnProduct = Double.sum(profitOnProduct, auxParsed);
+                        auxReamingValueOnProduct = computedValue;
+                    }
+
+                    if (!changeText) {
+                        remainingValue.setText(StringToFloat.editStringValueWithDollar(Double.toString(auxReamingValueOnProduct)));
+                    }
+                    else {
+                        remainingValue.setText(StringToFloat.editStringValueWithDollar(Double.toString(auxProfitOnProduct)));
+                    }
+
 
                     String formatted = NumberFormat.getCurrencyInstance(new Locale("pt", "BR")).format((parsed / 100));
 
@@ -271,23 +299,22 @@ public class AddNewEntryActivity extends AppCompatActivity {
 
         entryViewModel.getProductByIdSingle(clientId,productId).subscribe(product -> {
             if (product != null) {
-                clientProductName.setText(product.getProductName());
-                remainingValue.setText(StringToFloat.editStringValueWithDollar(product.getProductValue()));
+
+                // Compute profit and rest values
+                profitOnProduct = entryViewModel.computeAllEntriesForOneProduct(productId);
+                reamingValueOnProduct =  Double.parseDouble(product.getProductValue()) - profitOnProduct;
                 productDebitValue = product.getProductValue();
+
+                clientProductName.setText(product.getProductName());
+                textForAmountValue.setText(textOnScreenForAmountValue[0]);
+                remainingValue.setText(StringToFloat.editStringValueWithDollar(Double.toString(reamingValueOnProduct)));
+
             }
         }, throwable -> {
             Toast.makeText(getApplicationContext(), "Error fetching product data: " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
         });
 
 
-       entryViewModel.getClientByIdSingle(clientId)
-               .subscribe(client -> {
-                   if (client != null) {
-//                        clientDebitValue = client.getDebitValue();
-                   }
-               }, throwable -> {
-                   Toast.makeText(getApplicationContext(), "Error fetching client: " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-               });
    }
 
 }

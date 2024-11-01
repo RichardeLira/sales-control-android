@@ -25,7 +25,7 @@ public class StringToFloat {
     }
 
     public static String editStringValueWithDollar(String value) {
-        return "R$ " + value + ",00";
+        return "R$ " + String.format("%.2f", Double.valueOf(value)).replaceAll("[.\\s]", ",");
     }
 
 

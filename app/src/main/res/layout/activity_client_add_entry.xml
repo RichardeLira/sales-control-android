@@ -64,6 +64,7 @@
 
 
             <ImageView
+                android:id="@+id/change_value_amount_entry_screen"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/circle_background" />
@@ -92,11 +93,11 @@
         app:layout_constraintVertical_bias="0.0">
 
         <TextView
+            android:id="@+id/text_for_amount_value_on_entry_screen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|center"
             android:fontFamily="@font/poppins"
-            android:text="Valor restante"
             android:textColor="#A2A2A7"
             android:textSize="14sp"></TextView>
 
