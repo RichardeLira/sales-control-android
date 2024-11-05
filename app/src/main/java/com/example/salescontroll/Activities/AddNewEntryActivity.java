@@ -49,9 +49,9 @@ public class AddNewEntryActivity extends AppCompatActivity {
     private final String[] textOnScreenForAmountValue = {"valor restante", "seu lucro atual"};
     // Button change controller;
     private boolean changeText = true;
+    private boolean enterBlockControl = false;
     // Adapter config
     private AutoCompleteTextView autoCompleteTextViewPaymentType;
-    private AutoCompleteTextView autoCompleteTextViewProductChoice;
     private EditText valueEntry;
     private Date dateEntry;
     private ArrayAdapter<String> adapterPaymentType;
@@ -70,12 +70,16 @@ public class AddNewEntryActivity extends AppCompatActivity {
     private TextView remainingValue;
     private ImageView changeValueCompute;
     private  TextView textForAmountValue;
+    // Change values for price and debit
+    private double reamingValueOnProductToScreen;
+    private double profitOnProductToScreen;
     // Client information
     private String productDebitValue;
     private double profitOnProduct;
     private double reamingValueOnProduct;
     // Calendar config
     private Calendar entryDate = Calendar.getInstance();
+
 
 
     @Override
@@ -146,17 +150,19 @@ public class AddNewEntryActivity extends AppCompatActivity {
             @SuppressLint("CheckResult")
             @Override
             public void onClick(View view) {
-                if (!entryDateText.getText().toString().isEmpty()
-                        || !autoCompleteTextViewPaymentType.getText().toString().isEmpty()
-                        || !autoCompleteTextViewProductChoice.getText().toString().isEmpty()
-                        || !entryValue.getText().toString().isEmpty() ) {
+                if (entryDateText.getText().toString().isEmpty()
+                        || autoCompleteTextViewPaymentType.getText().toString().isEmpty()
+                        || entryValue.getText().toString().isEmpty()) {
 
-                    Toast.makeText(getApplicationContext(), "Preencha todos os campos para você continuar ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Preencha todos os campos para você continuar", Toast.LENGTH_SHORT).show();
+                } else if (enterBlockControl) {
+                    Toast.makeText(getApplicationContext(), "Valor adicionado maior que o valor do produto", Toast.LENGTH_SHORT).show();
                 } else {
                     Entries newEntry = new Entries();
                     newEntry.setPayMethod(autoCompleteTextViewPaymentType.getText().toString());
                     newEntry.setEnterDate(entryDateText.getText().toString());
-                    newEntry.setEnterValue(entryValue.getText().toString());
+                    newEntry.setEnterValue(Double.toString(profitOnProductToScreen));
+                    newEntry.setProductName(clientProductName.getText().toString());
 
                     entryViewModel.addNewEntry(newEntry, productId).subscribe(LongId -> {
                         if (LongId != null) {
@@ -187,21 +193,16 @@ public class AddNewEntryActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (!changeText) {
                     textForAmountValue.setText(textOnScreenForAmountValue[0]);
-                    remainingValue.setText(StringToFloat.editStringValueWithDollar(Double.toString(reamingValueOnProduct)));
+                    remainingValue.setText(StringToFloat.editStringValueWithDollar(Double.toString(reamingValueOnProductToScreen)));
                     changeText = true;
                 } else {
                     textForAmountValue.setText(textOnScreenForAmountValue[1]);
-                    remainingValue.setText(StringToFloat.editStringValueWithDollar(Double.toString(profitOnProduct)));
+                    remainingValue.setText(StringToFloat.editStringValueWithDollar(Double.toString(profitOnProductToScreen)));
                     changeText = false;
                 }
 
             }
         });
-
-
-
-
-
 
     }
 
@@ -212,10 +213,7 @@ public class AddNewEntryActivity extends AppCompatActivity {
         autoCompleteTextViewPaymentType.setAdapter(adapterPaymentType);
 
         dropDownListener();
-
     }
-
-
 
    private void dropDownListener() {
        autoCompleteTextViewPaymentType.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -224,8 +222,6 @@ public class AddNewEntryActivity extends AppCompatActivity {
                String item = adapterView.getItemAtPosition(i).toString();
            }
        });
-
-
    }
 
     private void textValueParsed() {
@@ -259,25 +255,26 @@ public class AddNewEntryActivity extends AppCompatActivity {
                     double auxParsed = (parsed/100);
 
                     // valor que sobra ainda para ser pago
-                    double computedValue =  reamingValueOnProduct - auxParsed;
-                    double auxReamingValueOnProduct = reamingValueOnProduct;
-                    double auxProfitOnProduct = profitOnProduct;
-
+                    double computedValue = reamingValueOnProduct - auxParsed;
 
                     if (computedValue < 0) {
-                        auxProfitOnProduct = Double.parseDouble(productDebitValue);
-                        auxReamingValueOnProduct = 0.00;
+                        profitOnProductToScreen = Double.parseDouble(productDebitValue);
+                        reamingValueOnProductToScreen = 0.0;
+                        enterBlockControl = true;
 
                     } else {
-                        auxProfitOnProduct = Double.sum(profitOnProduct, auxParsed);
-                        auxReamingValueOnProduct = computedValue;
+                        profitOnProductToScreen = Double.sum(profitOnProduct, auxParsed);
+                        reamingValueOnProductToScreen = computedValue;
+                        enterBlockControl = false;
                     }
 
                     if (!changeText) {
-                        remainingValue.setText(StringToFloat.editStringValueWithDollar(Double.toString(auxReamingValueOnProduct)));
+                        textForAmountValue.setText(textOnScreenForAmountValue[1]);
+                        remainingValue.setText(StringToFloat.editStringValueWithDollar(Double.toString(profitOnProductToScreen)));
                     }
                     else {
-                        remainingValue.setText(StringToFloat.editStringValueWithDollar(Double.toString(auxProfitOnProduct)));
+                        textForAmountValue.setText(textOnScreenForAmountValue[0]);
+                        remainingValue.setText(StringToFloat.editStringValueWithDollar(Double.toString(reamingValueOnProductToScreen)));
                     }
 
 

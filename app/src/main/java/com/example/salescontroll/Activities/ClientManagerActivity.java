@@ -197,6 +197,7 @@ public class ClientManagerActivity extends AppCompatActivity {
 
 
 
+
     private void onClickListenerProduct() {
         clientManagerProductsAdapter.setOptionListener(new ClientManagerProductsAdapter.OnItemClickListener() {
             @Override
