@@ -27,8 +27,8 @@ import com.example.salescontroll.entitys.Entries;
 import com.example.salescontroll.entitys.Product;
 
 import com.example.salescontroll.viewModel.ClientManagerViewModel;
-
 import java.util.List;
+
 
 public class ClientManagerActivity extends AppCompatActivity {
 
@@ -195,9 +195,6 @@ public class ClientManagerActivity extends AppCompatActivity {
                  });
     }
 
-
-
-
     private void onClickListenerProduct() {
         clientManagerProductsAdapter.setOptionListener(new ClientManagerProductsAdapter.OnItemClickListener() {
             @Override
@@ -209,6 +206,4 @@ public class ClientManagerActivity extends AppCompatActivity {
             }
         });
     }
-
-
 }

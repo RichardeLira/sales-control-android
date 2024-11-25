@@ -21,6 +21,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.example.salescontroll.Helpers.StringToFloat;
 import com.example.salescontroll.R;
 import com.example.salescontroll.entitys.Product;
 import com.example.salescontroll.viewModel.InsertNewProductViewModel;
@@ -41,7 +43,7 @@ public class InsertNewProductActivity extends AppCompatActivity {
     private InsertNewProductViewModel insertNewProductViewModel = null;
     private int actualClientId = -1;
     private Calendar calendar = Calendar.getInstance();
-
+    private double valueInsertOnDbProduct;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +100,9 @@ public class InsertNewProductActivity extends AppCompatActivity {
     }
 
     private void onClickEventListener() {
+
+        textValueParsed();
+
         backButton.setOnClickListener(view -> {
            Intent intent = new Intent(InsertNewProductActivity.this, ClientManagerActivity.class);
            startActivity(intent);
@@ -106,14 +111,16 @@ public class InsertNewProductActivity extends AppCompatActivity {
         addNewProductButton.setOnClickListener(view -> {
             String productQuantityInsert = productQuantity.getText().toString();
             String productNameInsert = productName.getText().toString();
-            String productValueInsert = productValue.getText().toString();
+            String productValueInsert = Double.toString(valueInsertOnDbProduct);
             String productBuyDateInsert = payDate.getText().toString();
 
 
             if (productQuantityInsert.isEmpty() || productNameInsert.isEmpty() || productValueInsert.isEmpty() || productBuyDateInsert.isEmpty()) {
                 Toast.makeText(InsertNewProductActivity.this, "All fields are required", Toast.LENGTH_SHORT).show();
-            }else if (productQuantityInsert.equals(String.valueOf(0))) {
+            } else if (productQuantityInsert.equals(String.valueOf(0))) {
                 Toast.makeText(InsertNewProductActivity.this, "Quantidade não pode ser 0 ", Toast.LENGTH_SHORT).show();
+            } else if (valueInsertOnDbProduct == 0) {
+                Toast.makeText(InsertNewProductActivity.this, "Insira um valor para seu produto", Toast.LENGTH_SHORT).show();
             } else if (actualClientId != -1){
                 Product product = new Product();
                 product.setProductName(productNameInsert);
@@ -130,9 +137,8 @@ public class InsertNewProductActivity extends AppCompatActivity {
         });
     }
 
-
     private void textValueParsed() {
-
+        // fixed code
         productValue.addTextChangedListener(new TextWatcher() {
 
             private String current = "";
@@ -143,6 +149,7 @@ public class InsertNewProductActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+
             }
 
             @Override
@@ -151,6 +158,7 @@ public class InsertNewProductActivity extends AppCompatActivity {
                     productValue.removeTextChangedListener(this);
 
                     String cleanString = s.toString().replaceAll("[R$,.\\s]", "");
+
                     double parsed;
                     try {
                         parsed = Double.parseDouble(cleanString);
@@ -158,6 +166,7 @@ public class InsertNewProductActivity extends AppCompatActivity {
                         parsed = 0.00;
                     }
 
+                    valueInsertOnDbProduct = parsed;
                     String formatted = NumberFormat.getCurrencyInstance(new Locale("pt", "BR")).format((parsed / 100));
 
                     current = formatted;
